@@ -53,3 +53,20 @@
   (let [f (fresh-session)]
     (is (= [42] (eval f (* 2 3 7)))
         "I can run code.")))
+
+(deftest repl-rescue-test
+  (let [f (fresh-session)]
+    ;; deref a new promise, then push a new repl and deliver the
+    ;; promise, pop the new repl and get the return value
+    (is (= '[(var user/p)] (eval f (def p (promise)))))
+    #_(eval f (clojure.core/println "Telempany"))
+    (f {:op :eval, :code "[:dereferenced @p (spit \"oout\" \"tom\")]", :id "first"})
+    (f {:op :eval, :code "#!push"})
+    (is (= [42] (eval f @(deliver p 42))))
+    (is (= [:dereferenced 42]
+           ;; Again, we should figure out exactly what this damn
+           ;; client code that produces this lazy seq is doing.
+           (->> (f {:op :eval, :code "#!pop"})
+                (filter #(= "first" (:id %)))
+                (keep :value)
+                (map read-string))))))
