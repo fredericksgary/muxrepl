@@ -113,6 +113,8 @@ The topmost element on the stack is the active session id."}
                   (fn [external-session]
                     {:post [%]}
                     (peek (@active-session external-session))))
+          (wrap-transport (fn [out-msg]
+                            (assoc out-msg :session (:session msg))))
           (handler)))))
 
 (defn wrap-muxrepl-api
