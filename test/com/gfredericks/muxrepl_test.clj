@@ -64,7 +64,7 @@
            (->> (f {:op :eval, :code "#!push"})
                 (map :out))))
     (is  (= [42] (eval f @(deliver p 42))))
-    (is (= [:dereferenced 42]
+    (is (= [[:dereferenced 42]]
            ;; Again, we should figure out exactly what this damn
            ;; client code that produces this lazy seq is doing.
            (->> (f {:op :eval, :code "#!pop"})
