@@ -1,5 +1,6 @@
 (ns com.gfredericks.muxrepl
   (:require [clojure.tools.nrepl.middleware :refer [set-descriptor!]]
+            [clojure.tools.nrepl.middleware.session]
             [clojure.tools.nrepl.misc :refer [response-for]]
             [clojure.tools.nrepl.transport :as transport]
             [com.gfredericks.muxrepl.util :refer [update]]))
