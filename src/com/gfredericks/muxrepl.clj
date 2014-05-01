@@ -2,7 +2,7 @@
   (:require [clojure.tools.nrepl.middleware :refer [set-descriptor!]]
             [clojure.tools.nrepl.misc :refer [response-for]]
             [clojure.tools.nrepl.transport :as transport]
-            [com.gfredericks.muxrepl.util :refer [queue update]]))
+            [com.gfredericks.muxrepl.util :refer [update]]))
 
 (def prefix "#!")
 
@@ -98,7 +98,7 @@ The topmost element on the stack is the active session id."}
                (alter queued-messages dissoc session-to-close)
                (let [new-active-session (get-active-session external-session)
                      msgs (@queued-messages new-active-session)]
-                 (alter queued-messages assoc new-active-session (queue))
+                 (alter queued-messages assoc new-active-session [])
                  (send a (fn [_]
                            (remote-println msg "Popped current repl")
                            (close-session handler session-to-close)
@@ -137,7 +137,7 @@ The topmost element on the stack is the active session id."}
                                  (assoc out-msg :session (:session msg))
                                  (do
                                    (alter queued-messages update internal-session
-                                          (fnil conj (queue))
+                                          (fnil conj [])
                                           out-msg)
                                    ;; don't send the message
                                    nil)))))
