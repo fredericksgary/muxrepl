@@ -159,5 +159,5 @@ The topmost element on the stack is the active session id."}
       (wrap-muxrepl-api)))
 
 (set-descriptor! #'wrap-muxrepl
-                 {:expects #{"eval" "clone"
+                 {:expects #{"eval" "clone" "session"
                              #'clojure.tools.nrepl.middleware.session/session}})
